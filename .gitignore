@@ -1,0 +1,8 @@
+checkpoints/
+saved_model/
+training_1/
+training_2/
+data/
+project-example/data
+project-example/data-exam
+project-example/.cache
