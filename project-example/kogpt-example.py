@@ -16,12 +16,8 @@ urllib.request.urlretrieve(
 Chatbot_Data = pd.read_csv("ChatBotData.csv")
 
 # Test 용으로 300개 데이터만 처리한다.
-Chatbot_Data = Chatbot_Data[:300]
+
 Chatbot_Data.head()
-BOS = "</s>"
-EOS = "</s>"
-PAD = "<pad>"
-MASK = "<unused0>"
 
 Q_TKN = "<usr>"
 A_TKN = "<sys>"
@@ -121,26 +117,6 @@ for batch_idx, samples in enumerate(train_dataloader):
     print("label =====> ", label)
 print("end")
 
-import torch
-from transformers import GPT2LMHeadModel
-from transformers import PreTrainedTokenizerFast
-tokenizer = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2", bos_token='</s>', eos_token='</s>', unk_token='<unk>', pad_token='<pad>', mask_token='<mask>') 
-tokenizer.tokenize("안녕하세요. 한국어 GPT-2 입니다.😤:)l^o")
-
-model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
-
-text = '근육이 커지기 위해서는'
-input_ids = tokenizer.encode(text)
-gen_ids = model.generate(torch.tensor([input_ids]),
-                           max_length=128,
-                           repetition_penalty=2.0,
-                           pad_token_id=tokenizer.pad_token_id,
-                           eos_token_id=tokenizer.eos_token_id,
-                           bos_token_id=tokenizer.bos_token_id,
-                           use_cache=True)
-generated = tokenizer.decode(gen_ids[0,:].tolist())
-print(generated)
-
 
 import numpy as np
 import pandas as pd
@@ -154,35 +130,9 @@ from transformers import PreTrainedTokenizerFast, GPT2LMHeadModel
 import re
 from tqdm import tqdm
 
-Q_TKN = "<usr>"
-A_TKN = "<sys>"
-BOS = '</s>'
-EOS = '</s>'
-MASK = '<unused0>'
-SENT = '<unused1>'
-PAD = '<pad>'
 
-koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2",
-            bos_token=BOS, eos_token=EOS, unk_token='<unk>',
-            pad_token=PAD, mask_token=MASK) 
 model = GPT2LMHeadModel.from_pretrained('skt/kogpt2-base-v2')
 
-import urllib.request
-
-urllib.request.urlretrieve(
-    "https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData.csv",
-    filename="ChatBotData.csv",
-)
-Chatbot_Data = pd.read_csv("ChatBotData.csv")
-# Test 용으로 300개 데이터만 처리한다.
-Chatbot_Data = Chatbot_Data[:300]
-Chatbot_Data.head()
-
-USE_CUDA = torch.cuda.is_available()
-device = torch.device('cuda:0')
-train_set = ChatbotDataset(Chatbot_Data, max_len=40)
-#윈도우 환경에서 num_workers 는 무조건 0으로 지정, 리눅스에서는 2
-train_dataloader = DataLoader(train_set, batch_size=32, num_workers=0, shuffle=True, collate_fn=collate_batch,)
 
 #model.to(device)
 model.train()

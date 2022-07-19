@@ -2,11 +2,10 @@ checkpoints/
 saved_model/
 training_1/
 training_2/
-<<<<<<< HEAD
+~/
+.cache/
+.ipynb_checkpoints/
 data/
+project-example/.cache
 project-example/data
 project-example/data-exam
-project-example/.cache
-=======
-~/
->>>>>>> 7c6ef134b494956528db8016e7ef7fe3b0c37cd0
